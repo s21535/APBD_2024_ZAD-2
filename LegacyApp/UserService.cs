@@ -5,21 +5,16 @@ namespace LegacyApp
     public class UserService {
         private IClientRepository _clientRepository;
         private ICreditService _creditService;
-        private User user;
+        private User _user;
         
         public UserService() {
             _clientRepository = new ClientRepository();
             _creditService = new UserCreditService();
-            user = new User();
+            _user = new User();
         }
         
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId) {
-
-            //BL - validation
-            if (!email.Contains("@") && !email.Contains(".")) {
-                return false;
-            }
-
+            
             //Infrastructure
             var client = _clientRepository.GetById(clientId);
             
@@ -27,10 +22,10 @@ namespace LegacyApp
             {
                 {
                     //Client = client,
-                    user.DateOfBirth = dateOfBirth;
-                    //EmailAddress = email
-                    user.FirstName = firstName;
-                    user.LastName = lastName;
+                    _user.DateOfBirth = dateOfBirth;
+                    _user.EmailAddress = email;
+                    _user.FirstName = firstName;
+                    _user.LastName = lastName;
                 };
             }
             catch (ArgumentException e)
@@ -40,26 +35,26 @@ namespace LegacyApp
 
             //BL + Infrastructure
             if (client.Type == "VeryImportantClient") {
-                user.HasCreditLimit = false;
+                _user.HasCreditLimit = false;
             }
             else if (client.Type == "ImportantClient") {
-                int creditLimit = _creditService.GetCreditLimit(user.LastName, user.DateOfBirth);
+                int creditLimit = _creditService.GetCreditLimit(_user.LastName, _user.DateOfBirth);
                 creditLimit = creditLimit * 2;
-                user.CreditLimit = creditLimit;
+                _user.CreditLimit = creditLimit;
             }
             else {
-                user.HasCreditLimit = true;
-                int creditLimit = _creditService.GetCreditLimit(user.LastName, user.DateOfBirth);
-                user.CreditLimit = creditLimit;
+                _user.HasCreditLimit = true;
+                int creditLimit = _creditService.GetCreditLimit(_user.LastName, _user.DateOfBirth);
+                _user.CreditLimit = creditLimit;
             }
             
             //BL - validation
-            if (user.HasCreditLimit && user.CreditLimit < 500) {
+            if (_user.HasCreditLimit && _user.CreditLimit < 500) {
                 return false;
             }
 
             //Infrastructure
-            UserDataAccess.AddUser(user);
+            UserDataAccess.AddUser(_user);
             return true;
         }
     }

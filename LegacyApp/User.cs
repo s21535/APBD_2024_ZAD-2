@@ -8,6 +8,7 @@ namespace LegacyApp
         private string _firstName;
         private string _lastName;
         private DateTime _dateOfBirth;
+        private string _emailAddress;
 
         public string FirstName 
         {
@@ -26,7 +27,6 @@ namespace LegacyApp
                 }
             }
         }
-
         public string LastName 
         {
             get
@@ -44,7 +44,6 @@ namespace LegacyApp
                 }
             }
         }
-        
         public DateTime DateOfBirth 
         {
             get
@@ -62,12 +61,24 @@ namespace LegacyApp
                 }
             }
         }
-        
+        public string EmailAddress
+        {
+            get
+            {
+                return _emailAddress;
+            }
+            set
+            {
+                if (!value.Contains("@") && !value.Contains(".")) {
+                    throw new ArgumentException($"Email Adress value is incorrect");
+                }
+                else
+                {
+                    _emailAddress = value;
+                }
+            }
+        }
         public object Client { get; internal set; }
-        //public DateTime DateOfBirth { get; internal set; }
-        public string EmailAddress { get; internal set; }
-        //public string FirstName { get; internal set; }
-        //public string LastName { get; internal set; }
         public bool HasCreditLimit { get; internal set; }
         public int CreditLimit { get; internal set; }
     }
