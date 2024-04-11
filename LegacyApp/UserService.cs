@@ -21,7 +21,7 @@ namespace LegacyApp
             try
             {
                 {
-                    //Client = client,
+                    _user.Client = client;
                     _user.DateOfBirth = dateOfBirth;
                     _user.EmailAddress = email;
                     _user.FirstName = firstName;
