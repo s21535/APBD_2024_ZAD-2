@@ -5,17 +5,19 @@ namespace LegacyApp
     public class UserService {
         private IClientRepository _clientRepository;
         private ICreditService _creditService;
-
+        private User user;
+        
         public UserService() {
             _clientRepository = new ClientRepository();
             _creditService = new UserCreditService();
+            user = new User();
         }
         
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId) {
             //BL - validation
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName)) {
+            /*if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName)) {
                 return false;
-            }
+            }*/
 
             //BL - validation
             if (!email.Contains("@") && !email.Contains(".")) {
@@ -34,14 +36,22 @@ namespace LegacyApp
             //Infrastructure
             var client = _clientRepository.GetById(clientId);
 
-            var user = new User {
-                Client = client,
-                DateOfBirth = dateOfBirth,
-                EmailAddress = email,
-                FirstName = firstName,
-                LastName = lastName
-            };
             
+            try
+            {
+                {
+                    /*Client = client,
+                    DateOfBirth = dateOfBirth,
+                    EmailAddress = email,*/
+                    user.FirstName = firstName;
+                    user.LastName = lastName;
+                };
+            }
+            catch (ArgumentException e)
+            {
+                return false;
+            }
+
             //BL + Infrastructure
             if (client.Type == "VeryImportantClient") {
                 user.HasCreditLimit = false;
