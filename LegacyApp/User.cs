@@ -7,6 +7,7 @@ namespace LegacyApp
 
         private string _firstName;
         private string _lastName;
+        private DateTime _dateOfBirth;
 
         public string FirstName 
         {
@@ -44,8 +45,26 @@ namespace LegacyApp
             }
         }
         
+        public DateTime DateOfBirth 
+        {
+            get
+            {
+                return _dateOfBirth;
+            }
+            set
+            {
+                var now = DateTime.Now;
+                int age = now.Year - value.Year;
+                if (now.Month < value.Month || (now.Month == value.Month && now.Day < value.Day)) age--;
+                if (age < 21)
+                {
+                    throw new ArgumentException($"User's age less than 21");
+                }
+            }
+        }
+        
         public object Client { get; internal set; }
-        public DateTime DateOfBirth { get; internal set; }
+        //public DateTime DateOfBirth { get; internal set; }
         public string EmailAddress { get; internal set; }
         //public string FirstName { get; internal set; }
         //public string LastName { get; internal set; }

@@ -14,35 +14,21 @@ namespace LegacyApp
         }
         
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId) {
-            //BL - validation
-            /*if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName)) {
-                return false;
-            }*/
 
             //BL - validation
             if (!email.Contains("@") && !email.Contains(".")) {
                 return false;
             }
-            
-            //BL
-            var now = DateTime.Now;
-            int age = now.Year - dateOfBirth.Year;
-            if (now.Month < dateOfBirth.Month || (now.Month == dateOfBirth.Month && now.Day < dateOfBirth.Day)) age--;
-            
-            if (age < 21) {
-                return false;
-            }
 
             //Infrastructure
             var client = _clientRepository.GetById(clientId);
-
             
             try
             {
                 {
-                    /*Client = client,
-                    DateOfBirth = dateOfBirth,
-                    EmailAddress = email,*/
+                    //Client = client,
+                    user.DateOfBirth = dateOfBirth;
+                    //EmailAddress = email
                     user.FirstName = firstName;
                     user.LastName = lastName;
                 };
